@@ -133,10 +133,6 @@ return {
       zls = {},
       rust_analyzer = {},
       clangd = {},
-      dockerls = {},
-      sqlls = {},
-      jsonls = {},
-      yamlls = {},
       lua_ls = {
         settings = {
           Lua = {
