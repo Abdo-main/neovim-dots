@@ -18,6 +18,16 @@ return {
     local dapui = require 'dapui'
 
     require('mason-nvim-dap').setup {
+      automatic_setup = true,
+      automatic_installation = true,
+      handlers = {},
+      ensure_installed = {
+        'codelldb',
+        'debugpy',
+      },
+    }
+
+    require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
       -- reasonable debug configurations
       automatic_setup = true,
@@ -65,6 +75,26 @@ return {
           terminate = '⏹',
           disconnect = '⏏',
         },
+      },
+    }
+    dap.adapters.lldb = {
+      type = 'executable',
+      command = 'codelldb', -- Make sure codelldb is in your PATH
+      name = 'lldb',
+    }
+
+    dap.configurations.zig = {
+      {
+        name = 'Launch Zig file',
+        type = 'lldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = {},
+        runInTerminal = false,
       },
     }
 

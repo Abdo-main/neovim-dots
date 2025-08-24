@@ -8,7 +8,7 @@ vim.g.maplocalleader = ' '
 local opts = { noremap = true, silent = true }
 
 -- Open terminal in a horizontal split
-vim.keymap.set('n', '<leader>t', ':split | term<CR>', { desc = 'Open terminal' })
+vim.keymap.set('n', '<leader>t', ':10 split | term<CR>', { desc = 'Open terminal' })
 
 -- Close the terminal buffer entirely
 vim.keymap.set('t', '<leader>q', [[<C-\><C-n>:q<CR>]], { desc = 'Close terminal' })
