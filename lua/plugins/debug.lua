@@ -4,11 +4,9 @@ return {
     -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
     'nvim-neotest/nvim-nio',
-
     -- Installs the debug adapters for you
     'williamboman/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
     'mfussenegger/nvim-dap-python',
@@ -16,7 +14,6 @@ return {
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
-
     require('mason-nvim-dap').setup {
       automatic_setup = true,
       automatic_installation = true,
@@ -26,17 +23,14 @@ return {
         'debugpy',
       },
     }
-
     require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
       -- reasonable debug configurations
       automatic_setup = true,
       automatic_installation = true,
-
       -- You can provide additional configuration to the handlers,
       -- see mason-nvim-dap README for more information
       handlers = {},
-
       -- You'll need to check that you have the required things installed
       -- online, please don't ask me how to install them :)
       ensure_installed = {
@@ -45,7 +39,6 @@ return {
         'debugpy',
       },
     }
-
     -- Basic debugging keymaps, feel free to change to your liking!
     vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
     vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
@@ -55,7 +48,6 @@ return {
     vim.keymap.set('n', '<leader>B', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
     end, { desc = 'Debug: Set Breakpoint' })
-
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
     dapui.setup {
@@ -77,12 +69,62 @@ return {
         },
       },
     }
+
+    -- LLDB adapter setup (used for C/C++/Rust/Zig)
     dap.adapters.lldb = {
       type = 'executable',
       command = 'codelldb', -- Make sure codelldb is in your PATH
       name = 'lldb',
     }
 
+    -- C/C++ debugging configuration
+    dap.configurations.c = {
+      {
+        name = 'Launch C file',
+        type = 'lldb',
+        request = 'launch',
+        program = function()
+          local program = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          return program
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = {},
+        runInTerminal = false,
+      },
+      {
+        name = 'Launch C file with args',
+        type = 'lldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = function()
+          local args_string = vim.fn.input 'Arguments: '
+          return vim.split(args_string, ' ')
+        end,
+        runInTerminal = false,
+      },
+      {
+        name = 'Attach to process',
+        type = 'lldb',
+        request = 'attach',
+        pid = function()
+          local handle = io.popen 'ps -ax -o pid,ppid,pgid,command'
+          local result = handle:read '*a'
+          handle:close()
+          return tonumber(vim.fn.input 'PID: ')
+        end,
+        cwd = '${workspaceFolder}',
+      },
+    }
+
+    -- Copy C configuration to cpp
+    dap.configurations.cpp = dap.configurations.c
+
+    -- Zig configuration (already present in your config)
     dap.configurations.zig = {
       {
         name = 'Launch Zig file',
@@ -100,11 +142,9 @@ return {
 
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
-
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
-
     -- Install golang specific config
     -- require('dap-go').setup()
     require('dap-python').setup()

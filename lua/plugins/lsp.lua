@@ -130,7 +130,14 @@ return {
     -- - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
     -- - settings (table): Override the default settings passed when initializing the server.
     local servers = {
-      zls = {},
+      zls = {
+        settings = {
+          zls = {
+            zig_exe_path = '/usr/lib/zig/zig',
+            zig_lib_path = '/usr/lib/zig/lib/std', -- <— explicitly point at std
+          },
+        },
+      },
       rust_analyzer = {},
       clangd = {},
       lua_ls = {
