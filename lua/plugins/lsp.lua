@@ -130,14 +130,23 @@ return {
     -- - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
     -- - settings (table): Override the default settings passed when initializing the server.
     local servers = {
-      zls = {
-        settings = {
-          zls = {
-            zig_exe_path = '/usr/lib/zig/zig',
-            zig_lib_path = '/usr/lib/zig/lib/std', -- <— explicitly point at std
-          },
-        },
+      ols = {
+        on_attach = function(_, bufnr)
+          -- Manual format
+          vim.keymap.set('n', '<leader>f', function()
+            vim.lsp.buf.format { async = true }
+          end, { buffer = bufnr })
+
+          -- Autoformat on save
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            buffer = bufnr,
+            callback = function()
+              vim.lsp.buf.format { async = false }
+            end,
+          })
+        end,
       },
+      zls = {},
       rust_analyzer = {},
       clangd = {},
       lua_ls = {
