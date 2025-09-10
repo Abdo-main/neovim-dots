@@ -4,5 +4,6 @@ return {
   opts = {
     -- your configuration here
     -- or leave empty to use defaults
+    files = { 'tasks', '*.plan', 'project/**/todo.md' },
   },
 }

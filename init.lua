@@ -41,6 +41,7 @@ require('lazy').setup({
   require 'plugins.aerial',
   require 'plugins.vim-tmux-navigator',
   require 'plugins.checkmate',
+  require 'plugins.note_taking',
 }, {
   ui = {
     -- If you have a Nerd Font, set icons to an empty table which will use the
