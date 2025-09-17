@@ -1,8 +1,14 @@
 return {
-  'datsfilipe/vesper.nvim',
+  'lmantw/themify.nvim',
   lazy = false,
-  priority = 1000,
+  priority = 999,
   config = function()
-    vim.cmd.colorscheme 'vesper'
+    require('themify').setup {
+      'datsfilipe/vesper.nvim',
+      'sainnhe/everforest',
+      'savq/melange-nvim',
+      'slugbyte/lackluster.nvim',
+      'sainnhe/gruvbox-material',
+    }
   end,
 }
