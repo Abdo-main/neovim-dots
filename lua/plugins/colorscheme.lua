@@ -9,6 +9,7 @@ return {
       'savq/melange-nvim',
       'slugbyte/lackluster.nvim',
       'sainnhe/gruvbox-material',
+      'rebelot/kanagawa.nvim',
     }
   end,
 }
