@@ -10,6 +10,8 @@ return {
       'slugbyte/lackluster.nvim',
       'sainnhe/gruvbox-material',
       'rebelot/kanagawa.nvim',
+      'Mofiqul/vscode.nvim',
+      'folke/tokyonight.nvim',
     }
   end,
 }
