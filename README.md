@@ -1,1 +1,1 @@
-... my neovim conigs
+... my neovim dots
